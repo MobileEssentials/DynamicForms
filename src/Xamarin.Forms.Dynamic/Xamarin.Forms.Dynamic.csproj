@@ -37,10 +37,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Xamarin.Forms.Dynamic.Desktop\JModel.cs">
-      <Link>JModel.cs</Link>
-    </Compile>
     <Compile Include="BindingObjectExtensions.cs" />
+    <Compile Include="JModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
