@@ -10,6 +10,7 @@
     <RootNamespace>Xamarin.Forms.Dynamic</RootNamespace>
     <AssemblyName>Xamarin.Forms.Dynamic</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+	<DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>d01925bf</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
