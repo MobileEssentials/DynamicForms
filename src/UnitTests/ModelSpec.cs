@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Xunit;
-using Xamarin.Forms.Xaml;
 using System.Reflection;
 using System.Diagnostics;
 using Xamarin.Forms;
@@ -99,7 +98,6 @@ namespace UnitTests
 			view.BindingContext = model;
 
 			// Load the Xaml into the View 
-			//		TODO: this method is internal in XF.Xaml
 			view.LoadFromXaml (xaml);
 
 			// Grab the new label control added to the view via Xaml

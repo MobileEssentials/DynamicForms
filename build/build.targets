@@ -113,7 +113,7 @@
 			</NuGet>
 		</ItemGroup>
 	
-		<Exec Command='"$(NuGetExe)" Pack "@(NuGet)" -NoPackageAnalysis -NonInteractive -Version %(Version)'
+		<Exec Command='"$(NuGetExe)" Pack "@(NuGet)" -NoPackageAnalysis -NonInteractive -Version %(Version) -Property Configuration=$(Configuration)'
 			  Condition="'%(Identity)' != ''" />
 	</Target>
 

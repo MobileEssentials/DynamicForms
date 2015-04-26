@@ -26,10 +26,7 @@ namespace Xamarin.Forms
 		/// </summary>
 		public JModel (params object[] content)
 		{
-			children = new ObservableCollection<JToken> ();
-			baseChildren = (IList<JToken>)propertiesField.GetValue (this);
-			children.CollectionChanged += new NotifyCollectionChangedEventHandler (OnChanged);
-
+			Initialize ();
 			Add (content);
 		}
 
@@ -39,10 +36,7 @@ namespace Xamarin.Forms
 		/// </summary>
 		public JModel (JObject other)
 		{
-			children = new ObservableCollection<JToken> ();
-			baseChildren = (IList<JToken>)propertiesField.GetValue (this);
-			children.CollectionChanged += new NotifyCollectionChangedEventHandler (OnChanged);
-
+			Initialize ();
 			foreach (JToken token in (IEnumerable<JToken>)other) {
 				Add (token);
 			}
@@ -76,12 +70,19 @@ namespace Xamarin.Forms
 			return new JTypeInfo (this);
 		}
 
+		/// <summary>
+		/// Gets the container's children tokens.
+		/// </summary>
 		protected override IList<JToken> ChildrenTokens
 		{
-			get
-			{
-				return this.children;
-			}
+			get { return children; }
+		}
+
+		void Initialize ()
+		{
+			children = new ObservableCollection<JToken> ();
+			baseChildren = (IList<JToken>)propertiesField.GetValue (this);
+			children.CollectionChanged += new NotifyCollectionChangedEventHandler (OnChanged);
 		}
 
 		void OnChanged (object sender, NotifyCollectionChangedEventArgs e)
