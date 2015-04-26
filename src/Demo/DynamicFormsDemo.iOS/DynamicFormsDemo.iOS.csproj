@@ -10,7 +10,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>DynamicFormsDemo.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>DynamicFormsDemoiOS</AssemblyName>
+    <AssemblyName>DynamicForms</AssemblyName>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
