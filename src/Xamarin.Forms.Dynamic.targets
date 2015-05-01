@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<Target Name="AdjustFormatsForPreRelease" DependsOnTargets="SemanticGit:GetVersion" BeforeTargets="SemanticGit:ApplyVersionFormats">
+		<PropertyGroup Condition="'$(_Commits)' != '0'">
+			<PackageVersionFormat>MAJOR.MINOR.PATCH-pre</PackageVersionFormat>
+			<AssemblyInformationalVersionFormat Condition="'$(AssemblyInformationalVersionFormat)' == ''">MAJOR.MINOR.PATCH-pre-COMMIT</AssemblyInformationalVersionFormat>
+		</PropertyGroup>
+	</Target>
+
+</Project>

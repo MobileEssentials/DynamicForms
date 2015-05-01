@@ -24,10 +24,12 @@
 -->
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+	<Import Project="packages\SemanticGit\build\SemanticGit.props" />
+
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<TrackFileAccess>false</TrackFileAccess>
-		<VersionFormat Condition="'$(VersionFormat)' == ''">MAJOR.MINOR.PATCH</VersionFormat>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,5 +48,18 @@
 	</ItemGroup>
 	
 	<Import Project="build\build.targets" />
+	<Import Project="packages\SemanticGit\build\SemanticGit.targets" />
+	<Import Project="src\Xamarin.Forms.Dynamic.targets" />
+
+	<!-- Overwrite how package version is determined -->
+	<Target Name="FormatVersion" DependsOnTargets="AdjustFormatsForPreRelease;SemanticGit:GetVersion">
+		<PropertyGroup>
+			<Version Condition="'$(_Commits)' != '0'">$(_Major).$(_Minor).$(_Patch)-pre</Version>
+			<Version Condition="'$(_Commits)' == '0'">$(_Major).$(_Minor).$(_Patch)$(_PreRelease)</Version>
+		</PropertyGroup>
+
+		<Message Importance="high" Text="Determined version as: $(Version)" />
+		
+	</Target>
 
 </Project>
