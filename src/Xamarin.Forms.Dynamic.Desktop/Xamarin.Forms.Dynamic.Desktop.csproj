@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>cc06bd40</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>e28f5b4b</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -56,6 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="BindingObjectExtensions.cs" />
     <Compile Include="JModel.cs" />
     <Compile Include="JParameterInfo.cs" />
@@ -64,7 +67,6 @@
     <Compile Include="JPropertyMethodInfo.cs" />
     <Compile Include="JPropertySetterInfo.cs" />
     <Compile Include="JTypeInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
