@@ -1,19 +1,21 @@
-build:
-  project: build.proj
+init:
+  - git config --global core.autocrlf input
+
+build_script:
+  - build.cmd /v:normal
 
 deploy:
   - provider: NuGet
     api_key:
-      secure: YOUR_ENCRYPTED_APIKEY		            # See http://www.appveyor.com/docs/deployment/nuget
+      secure: 7MS5+XWaFchMXFqzgneQCqo9U0DlxiPXe/KWWUnbCBDEizVn06EjdQZkWu1gbNOJ
     artifact: /.*\.nupkg/
     on:
       branch: master
-      appveyor_repo_tag: true
 
   - provider: GitHub
     release: $(APPVEYOR_REPO_TAG_NAME)
     auth_token:
-      secure: YOUR_ENCRYPTED_PERSONAL_ACCESS_TOKEN  # See http://www.appveyor.com/docs/deployment/github
+		secure: R9sB6B+4wcCcwie1muUXWBA+ZCZmh9YWkIcDkuh3OoaSYVwyPLTrBzfl38IS0I2c
     artifact: /.*\.nupkg/
     draft: false
     prerelease: false

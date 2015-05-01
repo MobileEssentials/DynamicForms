@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Xamarin.Forms.Dynamic</id>
-		<version>1.0.0</version>
+		<version>0.1.0</version>
 		<authors>Daniel Cazzulino</authors>
 		<owners>Daniel Cazzulino</owners>
 		<licenseUrl>http://www.mobileessentials.org/license</licenseUrl>
@@ -13,7 +13,7 @@
 		<copyright />
 		<dependencies>
 			<dependency id="Newtonsoft.Json" version="6.0.8" />
-			<dependency id="Xamarin.Forms.Master" version="1.2.2.8690" />
+			<dependency id="Xamarin.Forms" version="1.4.3.6358-pre2" />
 		</dependencies>
 	</metadata>
 	<files>
