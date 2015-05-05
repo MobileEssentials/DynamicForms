@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<ProductVersion>8.0.30703</ProductVersion>
 		<SchemaVersion>2.0</SchemaVersion>
 		<ProjectGuid>{3D170734-2515-4EE8-B85B-C8BF9C7C582F}</ProjectGuid>
@@ -12,9 +12,9 @@
 		<IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
 		<AssemblyName>Xamarin.Forms.Dynamic</AssemblyName>
 		<DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
-		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-		<RestorePackages>true</RestorePackages>
-		<NuGetPackageImportStamp>61d54409</NuGetPackageImportStamp>
+		<MSBuildExtensionsPath>$(MSBuildProjectDirectory)\..\..\build\MSBuild\</MSBuildExtensionsPath>
+		<TargetFrameworkRootPath>$(MSBuildProjectDirectory)\..\..\build\Reference Assemblies\Microsoft\Framework\</TargetFrameworkRootPath>
+		<FrameworkPathOverride>$(TargetFrameworkRootPath)Xamarin.iOS\v1.0</FrameworkPathOverride>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
@@ -29,6 +29,7 @@
 		<MtouchLink>None</MtouchLink>
 		<MtouchDebug>true</MtouchDebug>
 		<CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+		<ComputedPlatform>iPhoneSimulator</ComputedPlatform>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugType>none</DebugType>
@@ -40,6 +41,7 @@
 		<MtouchArch>i386, x86_64</MtouchArch>
 		<ConsolePause>false</ConsolePause>
 		<CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+		<ComputedPlatform>iPhone</ComputedPlatform>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\Xamarin.Forms.Dynamic.Desktop\BindingObjectExtensions.cs">
@@ -77,34 +79,30 @@
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="System" />
-		<Reference Include="System.Xml" />
 		<Reference Include="System.Core" />
-		<Reference Include="monotouch" />
 		<Reference Include="Xamarin.Forms.Core, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Xamarin.Forms.Master.1.2.2.8690\lib\MonoTouch10\Xamarin.Forms.Core.dll</HintPath>
+			<HintPath>..\packages\Xamarin.Forms.1.4.3.6358-pre2\lib\MonoTouch10\Xamarin.Forms.Core.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Xamarin.Forms.Master.1.2.2.8690\lib\MonoTouch10\Xamarin.Forms.Platform.dll</HintPath>
+			<HintPath>..\packages\Xamarin.Forms.1.4.3.6358-pre2\lib\MonoTouch10\Xamarin.Forms.Platform.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Xamarin.Forms.Platform.iOS.Classic, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Xamarin.Forms.Master.1.2.2.8690\lib\MonoTouch10\Xamarin.Forms.Platform.iOS.Classic.dll</HintPath>
+			<HintPath>..\packages\Xamarin.Forms.1.4.3.6358-pre2\lib\MonoTouch10\Xamarin.Forms.Platform.iOS.Classic.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Xamarin.Forms.Xaml, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Xamarin.Forms.Master.1.2.2.8690\lib\MonoTouch10\Xamarin.Forms.Xaml.dll</HintPath>
+			<HintPath>..\packages\Xamarin.Forms.1.4.3.6358-pre2\lib\MonoTouch10\Xamarin.Forms.Xaml.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 	</ItemGroup>
-	<Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
-	<Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+	<Import Project="$(MSBuildExtensionsPath)Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+	<Import Project="..\packages\Xamarin.Forms.1.4.3.6358-pre2\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6358-pre2\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
 	<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
 		<PropertyGroup>
-			<ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+			<ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
 		</PropertyGroup>
-		<Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-		<Error Condition="!Exists('..\packages\Xamarin.Forms.Master.1.2.2.8690\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Master.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Forms.Master.1.2.2.8690\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Master.targets'))" />
+		<Error Condition="!Exists('..\packages\Xamarin.Forms.1.4.3.6358-pre2\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Forms.1.4.3.6358-pre2\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
 	</Target>
-	<Import Project="..\packages\Xamarin.Forms.Master.1.2.2.8690\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Master.targets" Condition="Exists('..\packages\Xamarin.Forms.Master.1.2.2.8690\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Master.targets')" />
 </Project>

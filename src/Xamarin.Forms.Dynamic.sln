@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2AF55F73-4FE0-46B1-B5C4-534F028A90C1}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,11 +19,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{E419094A-B6F6-4DF5-8B74-AD3F14F5F69A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Forms.Dynamic.Desktop", "Xamarin.Forms.Dynamic.Desktop\Xamarin.Forms.Dynamic.Desktop.csproj", "{8E278264-E186-42BA-8769-EE3CFB4CE519}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{EBC00B62-7716-43D0-BFAE-E00673EA5E56}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Forms.Dynamic.iOS.Classic", "Xamarin.Forms.Dynamic.iOS.Classic\Xamarin.Forms.Dynamic.iOS.Classic.csproj", "{3D170734-2515-4EE8-B85B-C8BF9C7C582F}"
 EndProject
