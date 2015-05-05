@@ -1,0 +1,124 @@
+<!--
+***********************************************************************************************
+Xamarin.iOS.CSharp.After.targets
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+  created a backup copy.  Incorrect changes to this file will make it
+  impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (C) 2010-2011 Novell. All rights reserved.
+Copyright (C) 2011-2013 Xamarin. All rights reserved.
+***********************************************************************************************
+-->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<Target Name="_GenerateBuildSessionId"
+					BeforeTargets="_SayHello">
+		
+		<GenerateBuildSessionId ProjectFullPath="$(MSBuildProjectFullPath)" ProjectName="$(MSBuildProjectName)" >
+			<Output TaskParameter="BuildSessionId" PropertyName="BuildSessionId" />
+			<Output TaskParameter="BuildAppName" PropertyName="BuildAppName" />
+		</GenerateBuildSessionId>
+		
+	</Target>
+
+	<PropertyGroup>
+		<CleanDependsOn>
+			$(CleanDependsOn);
+			_CleanMtbs;
+		</CleanDependsOn>
+	</PropertyGroup>
+
+	<Target Name="_CleanMtbs">
+		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(MtouchTargetsEnabled)' == 'true'" Directories="$(OutputPath);$(IntermediateOutputPath)" ContinueOnError="true" />
+	</Target>
+
+	<Target Name="_SayHello"
+          BeforeTargets="_CleanDebugSymbols;_CleanAppBundle;_DetectAppManifest;_DetectSdkLocations;_DetectBundleIdentifier;">    
+		
+    <SayHello 
+			SessionId="$(BuildSessionId)"
+			IntermediateDir="$(IntermediateOutputPath)build_package\"
+			HttpPort="$(HttpPort)"
+			MtbsBuildsPath="~/Library/Caches/Xamarin/mtbs/builds"
+			ServerAddress="$(ServerAddress)"
+			AppName="$(BuildAppName)"
+			BuildingInsideVisualStudio="$(BuildingInsideVisualStudio)"
+			BSAT="$(BSAT)">
+			<Output TaskParameter="IsBuildServerAvailable" PropertyName="MtouchTargetsEnabled" />
+			<Output TaskParameter="MacBuildPath" PropertyName="MacBuildPath" />
+		</SayHello>
+
+		<PropertyGroup>
+			<MtouchProjectFullPath>$(MacBuildPath)/$(MSBuildProjectFile)</MtouchProjectFullPath>
+		</PropertyGroup>
+		
+  </Target>
+
+	<PropertyGroup>
+		<CreateAppBundleDependsOn>
+			GetBundleResourceWithLogicalNameItems;
+			$(CreateAppBundleDependsOn)
+		</CreateAppBundleDependsOn>
+	</PropertyGroup>
+
+	<Target Name="GetBundleResourceWithLogicalNameItems"
+		Returns="@(_BundleResourceWithLogicalName)"
+		DependsOnTargets="_GenerateBundleName">
+
+		<ItemGroup>
+			<!-- We need this metadata to fix the source in VS -->
+			<_BundleResourceWithLogicalName>
+				<BuildSessionId>$(BuildSessionId)</BuildSessionId>
+				<BuildServerPath>..\..\$(_AppBundleName)\$(BuildSessionId)\%(Identity)</BuildServerPath>
+				<BuildServerPath Condition="'$(_AppBundleName)' == ''">..\..\$(BuildAppName)\$(BuildSessionId)\%(Identity)</BuildServerPath>
+			</_BundleResourceWithLogicalName>
+		</ItemGroup>
+
+		<CollectMonotouchReferences References="@(_MSBuildProjectReferenceExistent)">
+			<Output TaskParameter="MonoTouchReferences" ItemName="MonoTouchReferences"/>
+		</CollectMonotouchReferences>
+		
+		<!-- This will collect the bundle resource items in the referenced projects -->
+		<MSBuild
+				Projects="@(MonoTouchReferences)"
+				Targets="GetBundleResourceWithLogicalNameItems"
+				BuildInParallel="$(BuildInParallel)"
+				RebaseOutputs="true"
+				Properties="%(MonoTouchReferences.SetConfiguration); %(MonoTouchReferences.SetPlatform)"
+				Condition="'@(MonoTouchReferences)' != '' and '%(MonoTouchReferences.Private)' != 'false' and '$(UseCommonOutputDirectory)' != 'true'"
+				ContinueOnError="$(ContinueOnError)">
+
+			<Output TaskParameter="TargetOutputs" ItemName="_BundleResourceWithLogicalName"/>
+
+		</MSBuild>
+
+	</Target>
+
+	<Target Name="_CollectAssemblies" DependsOnTargets="ResolveReferences">
+		<ItemGroup>
+			<_Assemblies Include="@(ReferencePath);@(CopyLocalFiles);@(ResolvedDependencyFiles);@(ReferenceDependencyPaths);$(TargetPath)" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_ConvertDebuggingFiles" DependsOnTargets="_CollectAssemblies"
+					Inputs="@(_Assemblies)"
+					Outputs="@(_Assemblies -> '%(FullPath).mdb')"
+					BeforeTargets="_CompileToNative">
+
+		<ConvertPdbToMdb Assemblies="@(_Assemblies)" />
+
+	</Target>
+
+	<Target
+		Name="CopyFilesToMacOutputDirectory"
+		AfterTargets="CopyFilesToOutputDirectory">
+
+		<CopyFilesToBuildServer
+			  SessionId="$(BuildSessionId)"
+				Condition="'$(MtouchTargetsEnabled)' == 'true'"
+				Files="@(_SourceItemsToCopyToOutputDirectory->'%(TargetPath)');@(_SourceItemsToCopyToOutputDirectoryAlways->'%(TargetPath)')" />
+		
+	</Target>
+
+</Project>
