@@ -11,6 +11,7 @@ deploy:
     artifact: /.*\.nupkg/
     on:
       branch: master
+      appveyor_repo_tag: true
 
   - provider: GitHub
     release: $(APPVEYOR_REPO_TAG_NAME)
