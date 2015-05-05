@@ -19,7 +19,7 @@
 		<DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
 		<MSBuildExtensionsPath>$(MSBuildProjectDirectory)\..\..\build\MSBuild\</MSBuildExtensionsPath>
 		<MonoAndroidToolsDirectory>$(MSBuildExtensionsPath)Xamarin\Android\</MonoAndroidToolsDirectory>
-		<AndroidSdkDirectory>$(MSBuildProjectDirectory)\..\..\build\Android\</AndroidSdkDirectory>
+		<AndroidSdkDirectory>$(MSBuildProjectDirectory)\..\..\build\Android</AndroidSdkDirectory>
 		<TargetFrameworkRootPath>$(MSBuildProjectDirectory)\..\..\build\Reference Assemblies\Microsoft\Framework</TargetFrameworkRootPath>
 		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 		<WarningLevel>4</WarningLevel>
