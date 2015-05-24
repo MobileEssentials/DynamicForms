@@ -1,8 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
 using System.Linq;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using System;
+using System.Reflection;
 
 namespace Xamarin.Forms
 {

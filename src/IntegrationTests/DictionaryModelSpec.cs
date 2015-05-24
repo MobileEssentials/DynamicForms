@@ -4,50 +4,25 @@ using System.Reflection;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Dynamic;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
-	public class ModelSpec
+	public class DictionaryModelSpec
 	{
-		static ModelSpec()
+		static DictionaryModelSpec()
 		{
             Device.PlatformServices = new MockPlatformServices();
         }
 
 		[Fact]
-		public void when_parsing_model_then_constructs_tree_of_models ()
-		{
-			var model = JModel.Parse (@"{
-	""Name"": ""Xamarin"",
-	""Address"": {
-		""Street"": ""Camila"",
-		""Phone"": {
-			""Prefix"": ""+54"",
-			""Area"": ""11""
-		}
-	}
-}
-");
-
-			Assert.Equal ("Xamarin", model.Property ("Name").Value.Value<string> ());
-			Assert.Equal ("Camila", model.Property ("Address").Value.Value<JObject> ().Property("Street").Value.Value<string>());
-
-			Assert.IsAssignableFrom<JModel> (model.Property ("Address").Value.Value<JObject> ());
-			Assert.IsAssignableFrom<JModel> (model.Property ("Address").Value.Value<JObject> ().Property("Phone").Value.Value<JObject>());
-
-			model.Property ("Address").Remove ();
-			Assert.Null (model.Property ("Address"));
-		}
-
-		[Fact]
 		public void when_binding_then_updates_view ()
 		{
 			var view = new MockView ();
-			var model = JModel.Parse(@"
-{
-	""Title"": ""Bar""
-}
-");
+			var model = new DictionaryModel(new Dictionary<string, object>
+			{
+				{ "Title", "Bar" }
+			});
 
 			view.SetBinding (MockView.TextProperty, "Title");
 			view.BindingContext = model;
@@ -59,16 +34,15 @@ namespace UnitTests
 		public void when_changing_model_then_updates_view ()
 		{
 			var view = new MockView ();
-			var model = JModel.Parse(@"
-{
-	""Title"": ""Bar""
-}
-");
+			var model = new DictionaryModel(new Dictionary<string, object>
+			{
+				{ "Title", "Bar" }
+			});
 
 			view.SetBinding (MockView.TextProperty, "Title");
 			view.BindingContext = model;
 
-			model.Property ("Title").Value = "Foo";
+			model["Title"] = "Foo";
 
 			Assert.Equal ("Foo", view.Text);
 		}
@@ -83,12 +57,10 @@ namespace UnitTests
 	<Label Text='{Binding Title, Mode=TwoWay}' VerticalOptions='Center' HorizontalOptions='Center' />
 </ContentPage> ";
 
-			// Get dummy data from somewhere (i.e. VS)
-			var model = JModel.Parse(@"
-{
-	""Title"": ""Bar""
-}
-");
+			var model = new DictionaryModel(new Dictionary<string, object>
+			{
+				{ "Title", "Bar" }
+			});
 
 			// Create empty container page for the XAML
 			//		TODO: ensure the root element in the Xaml is actually a ContentPage?
@@ -111,10 +83,10 @@ namespace UnitTests
 			label.Text = "Foo";
 
 			// Underlying model is updated!
-			Assert.Equal ("Foo", model.Property ("Title").Value.Value<string> ());
+			Assert.Equal ("Foo", model["Title"]);
 
             // Change the underlying model is
-            model.Property("Title").Value = "Bar";
+            model["Title"] = "Bar";
 
             // UI label properly reflecting underlying model change!
             Assert.Equal("Bar", label.Text);
@@ -130,17 +102,21 @@ namespace UnitTests
 </ContentPage> ";
 
 			// Get dummy data from somewhere (i.e. VS)
-			var model = JModel.Parse (@"{
-	""Name"": ""Xamarin"",
-	""Address"": {
-		""Street"": ""Camila"",
-		""Phone"": {
-			""Prefix"": ""+54"",
-			""Area"": ""11""
-		}
-	}
-}
-");
+			var model = new DictionaryModel(new Dictionary<string, object>
+			{
+				{ "Name", "Xamarin" },
+				{ "Address", new Dictionary<string, object> 
+					{
+						{  "Street", "Camila" },
+						{  "Phone", new Dictionary<string, object> 
+							{
+								{ "Prefix", "+54" },
+								{ "Area", "11" },
+							}
+						},
+					}
+				}
+			});
 
 			// Create empty container page for the XAML
 			//		TODO: ensure the root element in the Xaml is actually a ContentPage?
@@ -164,7 +140,7 @@ namespace UnitTests
 			label.Text = "+1";
 
 			// Underlying model is updated!
-			dynamic data = model;	
+			dynamic data = model;
 
 			Assert.NotNull ((object)data.Address);
 			Assert.NotNull ((object)data.Address.Phone);

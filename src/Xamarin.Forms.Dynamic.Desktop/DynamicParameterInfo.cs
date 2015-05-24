@@ -3,12 +3,12 @@ using System.Reflection;
 
 namespace Xamarin.Forms.Dynamic
 {
-    internal class JParameterInfo : ParameterInfo
+    internal class DynamicParameterInfo : ParameterInfo
     {
 		private MemberInfo member;
 		Type type;
 
-		public JParameterInfo (MemberInfo member, Type type, string name)
+		public DynamicParameterInfo (MemberInfo member, Type type, string name)
 		{
 			this.member = member;
 			this.type = type;
