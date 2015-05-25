@@ -6,3 +6,5 @@ packages
 *.nupkg
 *.suo
 *.user
+.DS_Store
+*.DS_Store
