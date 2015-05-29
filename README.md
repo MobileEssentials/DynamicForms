@@ -3,4 +3,4 @@ Makes Xamarin.Forms more dynamic, by allowing loading of XAML for views, and Jso
 
 ## Install
 
-  PM> Install-Package Xamarin.Forms.Dynamic -Pre
+    PM> Install-Package Xamarin.Forms.Dynamic -Pre
