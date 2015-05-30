@@ -88,6 +88,12 @@
     <Compile Include="..\Xamarin.Forms.Dynamic.Desktop\DynamicTypeInfo.cs">
       <Link>DynamicTypeInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Xamarin.Forms.Dynamic.Desktop\JsonCommand.cs">
+      <Link>JsonCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Xamarin.Forms.Dynamic.Desktop\JsonExtensions.cs">
+      <Link>JsonExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Xamarin.Forms.Dynamic.Desktop\JsonModel.cs">
       <Link>JsonModel.cs</Link>
     </Compile>

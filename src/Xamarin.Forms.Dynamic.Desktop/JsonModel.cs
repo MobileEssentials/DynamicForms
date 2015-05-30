@@ -3,8 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Input;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms.Dynamic;
@@ -19,6 +21,8 @@ namespace Xamarin.Forms
 		static readonly FieldInfo propertiesField = typeof (JObject).GetField ("_properties", BindingFlags.NonPublic | BindingFlags.Instance);
 
 		ConcurrentDictionary<string, PropertyInfo> infos = new ConcurrentDictionary<string, PropertyInfo> ();
+		Dictionary<string, ICommand> commands = new Dictionary<string, ICommand> ();
+
 		ObservableCollection<JToken> children;
 		IList<JToken> baseChildren;
 
@@ -69,6 +73,16 @@ namespace Xamarin.Forms
 		/// </summary>
 		public TypeInfo GetTypeInfo ()
 		{
+			// Populate commands first. They are immutable once schema is retrieved.
+			var commands = Properties().FirstOrDefault(prop => 
+				prop.Name.Equals("$commands", StringComparison.OrdinalIgnoreCase));
+
+			if (commands != null) {
+				if (commands.Value.Type != JTokenType.Object)
+					throw new ArgumentException (string.Format ("The metadata property '{0}' must contain a JSON object value.", commands.Name));
+				RefreshCommands ((JObject)commands.Value);
+			}
+
 			return new DynamicTypeInfo (name => infos.GetOrAdd (name, key => new DynamicPropertyInfo (
 				  typeof (JsonModel),
 				  key,
@@ -90,6 +104,26 @@ namespace Xamarin.Forms
 			children = new ObservableCollection<JToken> ();
 			baseChildren = (IList<JToken>)propertiesField.GetValue (this);
 			children.CollectionChanged += new NotifyCollectionChangedEventHandler (OnChanged);
+		}
+
+		void RefreshCommands (JObject commands)
+		{
+			this.commands = new Dictionary<string,ICommand>();
+
+			commands.PropertyChanged -= OnCommandsChanged;
+			commands.PropertyChanged += OnCommandsChanged;
+
+			foreach (var property in commands.Properties()) {
+				if (property.Value.Type != JTokenType.Object)
+					throw new ArgumentException (string.Format ("Command property '{0}' does not have a JSON object value.", property.Name));
+
+				this.commands[property.Name] = new JsonCommand (property.Value.Value<JObject> (), this);
+			}
+		}
+
+		void OnCommandsChanged (object sender, PropertyChangedEventArgs args)
+		{
+			RefreshCommands ((JObject)sender);
 		}
 
 		void OnChanged (object sender, NotifyCollectionChangedEventArgs e)
@@ -117,6 +151,9 @@ namespace Xamarin.Forms
 
 		Type GetType (string key)
 		{
+			if (commands.ContainsKey (key))
+				return typeof (ICommand);
+
 			var prop = Property (key);
 			if (prop == null)
 				return typeof (object);
@@ -143,6 +180,10 @@ namespace Xamarin.Forms
 
 		object GetValue (JsonModel model, string key)
 		{
+			ICommand command;
+			if (commands.TryGetValue (key, out command))
+				return command;
+
 			var prop = model.Property (key);
 			if (prop == null)
 				return null;
@@ -171,6 +212,9 @@ namespace Xamarin.Forms
 
 		void SetValue (JsonModel model, string key, object value)
 		{
+			if (commands.ContainsKey (key))
+				throw new InvalidOperationException ("Cannot set the value of a command property.");
+
 			var prop = model.Property (key);
 			if (prop == null) {
 				prop = new JProperty (key, value);
