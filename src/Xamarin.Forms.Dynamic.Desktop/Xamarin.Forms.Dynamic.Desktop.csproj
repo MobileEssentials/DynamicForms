@@ -63,6 +63,8 @@
     <Compile Include="DictionaryModel.cs" />
     <Compile Include="DynamicPropertyInfo.cs" />
     <Compile Include="DynamicTypeInfo.cs" />
+    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="JsonCommand.cs" />
     <Compile Include="JsonModel.cs" />
     <Compile Include="DynamicParameterInfo.cs" />
   </ItemGroup>

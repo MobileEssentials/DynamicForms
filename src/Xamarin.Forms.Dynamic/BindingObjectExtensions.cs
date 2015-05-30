@@ -1,5 +1,4 @@
-﻿
-namespace Xamarin.Forms
+﻿namespace Xamarin.Forms
 {
 	/// <summary>
 	/// Provides the <see cref="LoadFromXaml"/> extension method.
