@@ -1,11 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
+  <PropertyGroup>
+    <FormsSourceDir>..\..\..\..\Duplo\</FormsSourceDir>
+    <UseFormsSource Condition="'$(Configuration)' == 'Debug' And Exists('$(FormsSourceDir)')">true</UseFormsSource>
+    <PrepareForBuildDependsOn Condition="'$(UseFormsSource)' == 'true'">
+      ReplaceFormsReferences;
+      $(PrepareForBuildDependsOn)
+    </PrepareForBuildDependsOn>
+  </PropertyGroup>
+  
 	<Target Name="AdjustFormatsForPreRelease" DependsOnTargets="SemanticGit:GetVersion" BeforeTargets="SemanticGit:ApplyVersionFormats">
 		<PropertyGroup Condition="'$(_Commits)' != '0'">
 			<PackageVersionFormat>MAJOR.MINOR.PATCH-pre</PackageVersionFormat>
 			<AssemblyInformationalVersionFormat Condition="'$(AssemblyInformationalVersionFormat)' == ''">MAJOR.MINOR.PATCH-pre-COMMIT</AssemblyInformationalVersionFormat>
 		</PropertyGroup>
 	</Target>
-
+  
+  <Target Name="ReplaceFormsReferences">
+    <ItemGroup>
+      <!-- Remove Xamarin.Forms assembly references -->
+      <Reference Remove="%(Reference.Identity)"
+                 Condition="'@(Reference -> Contains('Xamarin.Forms'))' == 'True'" />
+      
+      <!-- And replace them with project references -->
+      <!-- NOTE: the following "just works" thanks to SmartReferences :) -->
+      <ProjectReference Include="$(FormsSourceDir)Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
+      <ProjectReference Include="$(FormsSourceDir)Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj" />
+      <ProjectReference Include="$(FormsSourceDir)Xamarin.Forms.Xaml\Xamarin.Forms.Xaml.csproj" />
+    </ItemGroup>
+  </Target>
+    
 </Project>

@@ -72,7 +72,6 @@ namespace Xamarin.Forms.Dynamic
 			Assert.Equal ("vga", target.Property ("Name").Value.Value<string> ());
 		}
 
-
 		[Fact]
 		public void when_can_execute_is_property_name_then_retrieves_value_from_target()
 		{
