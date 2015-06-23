@@ -205,6 +205,8 @@ namespace Xamarin.Forms
 					return prop.Value.Value<TimeSpan> ();
 				case JTokenType.Object:
 					return prop.Value.Value<JObject> ();
+				case JTokenType.Array:
+					return prop.Value.Value<JArray> ();
 				default:
 					return null;
 			}
