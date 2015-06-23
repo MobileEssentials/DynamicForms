@@ -134,8 +134,22 @@ namespace Xamarin.Forms
 					.Where (prop => prop.Value.Type == JTokenType.Object &&
 						!(prop.Value.Value<JObject> () is JsonModel));
 
+				// Replace all properties with JObject values into JsonModel
 				foreach (JProperty property in properties) {
 					property.Value = new JsonModel (property.Value.Value<JObject> ());
+				}
+
+				properties = e.NewItems
+					.OfType<JProperty> ()
+					.Where (prop => prop.Value.Type == JTokenType.Array);
+
+				// Replace JObject items in JArray values with JsonModel
+				foreach (JProperty property in properties) {
+					property.Value = new JArray (((JArray)property.Value.Value<JArray> ())
+						.Select (x => x.Type != JTokenType.Object ?
+							 x :
+							 new JsonModel ((JObject)x)
+						));
 				}
 
 				foreach (JToken token in e.NewItems.OfType<JToken> ()) {

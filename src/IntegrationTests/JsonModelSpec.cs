@@ -40,6 +40,27 @@ namespace UnitTests
 		}
 
 		[Fact]
+		public void when_parsing_model_then_object_arrays_are_models ()
+		{
+			var model = JsonModel.Parse (@"{
+	""People"": [
+		{
+			""Name"": ""kzu""
+		},
+		{
+			""Name"": ""vga""
+		}		
+	]
+}
+");
+
+			var values = model.Property("People").Value.Value<JArray>();
+
+			Assert.True (values[0] is JsonModel);
+			Assert.True (values[1] is JsonModel);
+		}
+
+		[Fact]
 		public void when_binding_then_updates_view ()
 		{
 			var view = new MockView ();
