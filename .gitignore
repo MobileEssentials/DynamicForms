@@ -8,3 +8,4 @@ packages
 *.user
 .DS_Store
 *.DS_Store
+*.cache
